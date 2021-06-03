@@ -50,6 +50,9 @@ export class Vector2 {
     static distance(vec1: Vector2, vec2: Vector2): number {
         return vec2.subtract(vec1).magnitude();
     }
+    static distanceSquared(vec1: Vector2, vec2: Vector2): number {
+        return vec2.subtract(vec1).squaredMagnitude();
+    }
     static dot(vec1: Vector2, vec2: Vector2): number {
         return vec1.x * vec2.x + vec1.y * vec2.y;
     }
