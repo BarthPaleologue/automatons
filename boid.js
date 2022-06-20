@@ -3,7 +3,7 @@ import { Triangle } from "./shapes/triangle.js";
 import { Circle } from "./shapes/circle.js";
 export class Boid {
     constructor(initialPosition, theta, scale, hitboxRadius, fov, ctx) {
-        this.velocity = new Vector2(0, 0);
+        this.velocity = new Vector2(Math.random() - 0.5, Math.random() - 0.5).scale(100);
         this.isHitboxDisplayed = false;
         this.shape = new Triangle(initialPosition, theta, scale, ctx);
         this.hitbox = new Circle(initialPosition, theta, hitboxRadius, fov, ctx);
@@ -56,10 +56,14 @@ export class Boid {
             this.velocity.normalizeInPlace();
             this.velocity.scaleInPlace(83);
             this.velocity.addInPlace(meanVelocity.scale(5));
-            this.velocity.addInPlace(directionToBarycenter.scale(1));
-            this.velocity.addInPlace(avoidanceDirection.scale(15));
+            this.velocity.addInPlace(directionToBarycenter.scale(40));
+            this.velocity.addInPlace(avoidanceDirection.scale(55));
             this.velocity.normalizeInPlace();
             this.velocity.scaleInPlace(4);
+            if (this.velocity.magnitude() > 2) {
+                this.velocity.normalizeInPlace();
+                this.velocity.scaleInPlace(2);
+            }
         }
         this.velocity.addInPlace(wallRepulsion.scale(-10));
         this.move();

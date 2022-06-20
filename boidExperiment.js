@@ -11,12 +11,13 @@ function randomColor() {
 }
 let boids = [];
 const hitboxRadius = 40;
-const hitboxAperture = 8 * Math.PI / 4;
+const hitboxAperture = 2 * Math.PI / 4;
 for (let i = 0; i < 1000; i++) {
     let randomPosition = new Vector2(Math.random() * width, Math.random() * height);
     let boid = new Boid(randomPosition, Math.random() * 6.28, 10, hitboxRadius, hitboxAperture, ctx);
-    //boid.shape.setColor(`#${randomColor()}`);
-    boid.velocity = Vector2.random();
+    boid.shape.setColor(`#${randomColor()}`);
+    let theta = Math.random() * 2 * Math.PI;
+    boid.velocity = new Vector2(Math.cos(theta), Math.sin(theta)).scale(100);
     boids.push(boid);
 }
 let keyboard = {};
@@ -48,7 +49,6 @@ function update() {
     for (let boid of boids)
         boid.shape.draw();
     ctx.closePath();
-    ctx.fillStyle = "crimson";
     ctx.fill();
     //drawing hitboxes with only one drawcall
     ctx.beginPath();

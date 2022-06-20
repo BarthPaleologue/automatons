@@ -17,17 +17,18 @@ function randomColor() {
 
 let boids: Boid[] = [];
 const hitboxRadius = 40;
-const hitboxAperture = 8 * Math.PI / 4;
+const hitboxAperture = 2 * Math.PI / 4;
 
 for (let i = 0; i < 1000; i++) {
     let randomPosition = new Vector2(Math.random() * width, Math.random() * height);
     let boid = new Boid(randomPosition, Math.random() * 6.28, 10, hitboxRadius, hitboxAperture, ctx);
-    //boid.shape.setColor(`#${randomColor()}`);
-    boid.velocity = Vector2.random();
+    boid.shape.setColor(`#${randomColor()}`);
+    let theta = Math.random() * 2 * Math.PI;
+    boid.velocity = new Vector2(Math.cos(theta), Math.sin(theta)).scale(100);
     boids.push(boid);
 }
 
-let keyboard: { [key: string]: boolean } = {};
+let keyboard: { [key: string]: boolean; } = {};
 
 let screenX = 0;
 let screenY = 0;
@@ -39,7 +40,7 @@ function update() {
     const nbCellsX = 20;
     const nbCellsY = 10;
 
-    let cells: { [key: string]: Boid[] } = {};
+    let cells: { [key: string]: Boid[]; } = {};
     for (let boid of boids) {
         let x = Math.floor(boid.shape.position.x / nbCellsX);
         let y = Math.floor(boid.shape.position.y / nbCellsY);
@@ -52,15 +53,15 @@ function update() {
         let x = Math.floor(boid.shape.position.x / nbCellsX);
         let y = Math.floor(boid.shape.position.y / nbCellsY);
         let neighbors = (cells[`${x};${y}`] || []).concat(
-            cells[`${x-1};${y-1}`] || [],
-            cells[`${x-1};${y}`] || [],
-            cells[`${x-1};${y+1}`] || [],
-            cells[`${x};${y-1}`] || [],
-            cells[`${x};${y+1}`] || [],
+            cells[`${x - 1};${y - 1}`] || [],
+            cells[`${x - 1};${y}`] || [],
+            cells[`${x - 1};${y + 1}`] || [],
+            cells[`${x};${y - 1}`] || [],
+            cells[`${x};${y + 1}`] || [],
             cells[`${x + 1};${y - 1}`] || [],
             cells[`${x + 1};${y}`] || [],
             cells[`${x + 1};${y + 1}`] || []
-        )
+        );
         boid.update(neighbors, width, height);
     }
 
@@ -68,7 +69,6 @@ function update() {
     ctx.beginPath();
     for (let boid of boids) boid.shape.draw();
     ctx.closePath();
-    ctx.fillStyle = "crimson";
     ctx.fill();
 
     //drawing hitboxes with only one drawcall
