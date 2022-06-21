@@ -1,7 +1,7 @@
-import { Shape } from "./shapes/shape";
-import { Vector2 } from "./vector2.js";
-import { Triangle } from "./shapes/triangle.js";
-import { Circle } from "./shapes/circle.js";
+import { Shape } from "./shape";
+import { Vector2 } from "./vector2";
+import { Triangle } from "./triangle";
+import { Circle } from "./circle";
 
 export class Boid {
     shape: Shape;
@@ -58,7 +58,6 @@ export class Boid {
         }
 
         if (neighbors.length > 0) {
-
             let meanVelocity = accumulatedVelocities.divide(neighbors.length);
 
             let avoidanceDirection = accumulatedDirections.divide(neighbors.length).normalize();
