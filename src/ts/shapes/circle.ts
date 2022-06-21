@@ -1,5 +1,5 @@
 import { Shape } from "./shape";
-import { Vector2 } from "./vector2";
+import { Vector2 } from "../utils/vector2";
 
 export class Circle extends Shape {
     aperture: number;

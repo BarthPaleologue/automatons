@@ -1,4 +1,4 @@
-import { Vector2 } from "./vector2";
+import { Vector2 } from "./utils/vector2";
 import { Boid } from "./boid";
 
 let canvas = document.getElementById("renderer") as HTMLCanvasElement;
@@ -28,7 +28,7 @@ for (let i = 0; i < 1000; i++) {
     boids.push(boid);
 }
 
-let keyboard: { [key: string]: boolean } = {};
+let keyboard: { [key: string]: boolean; } = {};
 
 let screenX = 0;
 let screenY = 0;
@@ -40,7 +40,7 @@ function update() {
     const nbCellsX = 20;
     const nbCellsY = 10;
 
-    let cells: { [key: string]: Boid[] } = {};
+    let cells: { [key: string]: Boid[]; } = {};
     for (let boid of boids) {
         let x = Math.floor(boid.shape.position.x / nbCellsX);
         let y = Math.floor(boid.shape.position.y / nbCellsY);

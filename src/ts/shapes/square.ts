@@ -1,5 +1,5 @@
 import { Shape } from "./shape";
-import { Vector2 } from "./vector2";
+import { Vector2 } from "../utils/vector2";
 
 export class Square extends Shape {
     constructor(initialPosition: Vector2, theta: number, scale: number, ctx: CanvasRenderingContext2D) {

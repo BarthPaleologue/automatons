@@ -1,6 +1,6 @@
-import { Vector2 } from "./vector2";
+import { Vector2 } from "../utils/vector2";
 
-export class Shape {
+export abstract class Shape {
     position: Vector2;
     theta: number;
     scale: number;
@@ -13,7 +13,7 @@ export class Shape {
         this.color = "white";
         this.context = ctx;
     }
-    draw() {}
+    draw() { }
     move(displacement: Vector2) {
         this.position.addInPlace(displacement);
     }

@@ -1,7 +1,7 @@
-import { Shape } from "./shape";
-import { Vector2 } from "./vector2";
-import { Triangle } from "./triangle";
-import { Circle } from "./circle";
+import { Shape } from "./shapes/shape";
+import { Vector2 } from "./utils/vector2";
+import { Triangle } from "./shapes/triangle";
+import { Circle } from "./shapes/circle";
 
 export class Boid {
     shape: Shape;
