@@ -68,9 +68,9 @@ export class Boid {
 
             this.velocity.normalizeInPlace();
             this.velocity.scaleInPlace(83);
-            this.velocity.addInPlace(meanVelocity.scale(5));
-            this.velocity.addInPlace(directionToBarycenter.scale(40));
-            this.velocity.addInPlace(avoidanceDirection.scale(55));
+            this.velocity.addInPlace(meanVelocity.scale(10));
+            this.velocity.addInPlace(directionToBarycenter.scale(20));
+            this.velocity.addInPlace(avoidanceDirection.scale(20));
             this.velocity.normalizeInPlace();
             this.velocity.scaleInPlace(4);
 

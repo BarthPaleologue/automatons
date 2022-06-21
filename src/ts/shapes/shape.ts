@@ -13,7 +13,7 @@ export abstract class Shape {
         this.color = "white";
         this.context = ctx;
     }
-    draw() { }
+    draw() {}
     move(displacement: Vector2) {
         this.position.addInPlace(displacement);
     }

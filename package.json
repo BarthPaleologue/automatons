@@ -11,6 +11,7 @@
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
   "devDependencies": {
+    "extended-random": "^1.0.0",
     "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.7.1",
     "sass": "^1.52.3",
