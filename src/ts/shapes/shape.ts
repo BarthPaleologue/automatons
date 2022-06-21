@@ -3,9 +3,9 @@ import { Vector2 } from "../utils/vector2";
 export abstract class Shape {
     position: Vector2;
     theta: number;
-    scale: number;
+    readonly scale: number;
     color: string;
-    context: CanvasRenderingContext2D;
+    protected readonly context: CanvasRenderingContext2D;
     constructor(initialPosition: Vector2, theta: number, scale: number, ctx: CanvasRenderingContext2D) {
         this.position = initialPosition;
         this.theta = theta;
