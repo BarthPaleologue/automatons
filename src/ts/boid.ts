@@ -20,6 +20,9 @@ export class Boid {
     getForwardDirection() {
         return this.shape.getForwardVector();
     }
+    getPosition(): Vector2 {
+        return this.shape.position;
+    }
     draw() {
         if (this.isHitboxDisplayed) this.hitbox.draw();
         this.shape.draw();
@@ -38,17 +41,32 @@ export class Boid {
         let accumulatedPositions = new Vector2(0, 0);
 
         let wallRepulsion = new Vector2(0, 0);
-        wallRepulsion.x -= 1 / (this.shape.position.x + 1);
-        wallRepulsion.y -= 1 / (this.shape.position.y + 1);
-        wallRepulsion.x += 1 / (arenaWidth - this.shape.position.x + 1);
-        wallRepulsion.y += 1 / (arenaHeight - this.shape.position.y + 1);
+        wallRepulsion.x -= 1 / (this.getPosition().x + 1);
+        wallRepulsion.y -= 1 / (this.getPosition().y + 1);
+        wallRepulsion.x += 1 / (arenaWidth - this.getPosition().x + 1);
+        wallRepulsion.y += 1 / (arenaHeight - this.getPosition().y + 1);
+
+        const maxSpeed = 2;
+
+        let steer = new Vector2(0, 0);
+        let closeCount = 0;
 
         for (let otherBoid of boids) {
             if (otherBoid == this) continue;
-            let d = Vector2.distanceSquared(this.shape.position, otherBoid.shape.position);
-            let direction = otherBoid.shape.position.subtract(this.shape.position).divide(d);
+            let d = Vector2.distance(this.getPosition(), otherBoid.getPosition());
+            let direction = otherBoid.getPosition().subtract(this.getPosition()).divide(d);
             let angularDeviation = Math.abs(Math.atan2(direction.y, direction.x) - Math.atan2(this.getForwardDirection().y, this.getForwardDirection().x));
-            if (d < this.hitbox.scale ** 2 && angularDeviation < this.hitbox.aperture / 2) {
+
+            if (d > 0 && d < this.hitboxRadius) {
+                // too close
+                let diff = this.getPosition().subtract(otherBoid.getPosition());
+                diff.normalizeInPlace();
+                diff.divideInPlace(d);
+                steer.addInPlace(diff);
+                closeCount++;
+            }
+
+            if (d < this.hitbox.scale && angularDeviation < this.hitbox.aperture / 2) {
                 neighbors.push(otherBoid);
 
                 accumulatedDirections.addInPlace(this.shape.position.subtract(otherBoid.shape.position));
@@ -57,10 +75,22 @@ export class Boid {
             }
         }
 
+        if (closeCount > 0) steer.divideInPlace(closeCount);
+
+        const maxSteering = 0.2;
+
+        if (steer.squaredMagnitude() > 0) {
+            steer.normalizeInPlace();
+            steer.scaleInPlace(maxSpeed);
+            steer.subtract(this.velocity);
+            if (steer.magnitude() > maxSteering) {
+                steer.normalizeInPlace();
+                steer.scaleInPlace(maxSteering);
+            }
+        }
+
         if (neighbors.length > 0) {
             let meanVelocity = accumulatedVelocities.divide(neighbors.length);
-
-            let avoidanceDirection = accumulatedDirections.divide(neighbors.length).normalize();
 
             let barycenter = accumulatedPositions.divide(neighbors.length);
 
@@ -70,15 +100,16 @@ export class Boid {
             this.velocity.scaleInPlace(83);
             this.velocity.addInPlace(meanVelocity.scale(10));
             this.velocity.addInPlace(directionToBarycenter.scale(20));
-            this.velocity.addInPlace(avoidanceDirection.scale(20));
             this.velocity.normalizeInPlace();
             this.velocity.scaleInPlace(4);
 
-            if (this.velocity.magnitude() > 2) {
+            if (this.velocity.magnitude() > maxSpeed) {
                 this.velocity.normalizeInPlace();
-                this.velocity.scaleInPlace(2);
+                this.velocity.scaleInPlace(maxSpeed);
             }
         }
+
+        this.velocity.addInPlace(steer);
 
         this.velocity.addInPlace(wallRepulsion.scale(-10));
 
