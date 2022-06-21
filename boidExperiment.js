@@ -60,25 +60,9 @@ function update() {
     ctx.fillStyle = "rgba(255,255,255,0.1)";
     ctx.fill();
     listenToKeyboard();
+    requestAnimationFrame(update);
 }
 function listenToKeyboard() {
-    let speed = 2;
-    if (keyboard["z"]) {
-        screenY -= speed;
-        ctx.translate(0, speed);
-    }
-    if (keyboard["q"]) {
-        screenX -= speed;
-        ctx.translate(speed, 0);
-    }
-    if (keyboard["s"]) {
-        screenY += speed;
-        ctx.translate(0, -speed);
-    }
-    if (keyboard["d"]) {
-        screenX += speed;
-        ctx.translate(-speed, 0);
-    }
     if (keyboard["-"]) {
         for (let boid of boids)
             boid.hitbox.aperture -= 0.05;
@@ -98,4 +82,4 @@ document.addEventListener("keydown", e => {
 document.addEventListener("keyup", e => {
     keyboard[e.key] = false;
 });
-setInterval(update, 1000 / 60);
+requestAnimationFrame(update);
